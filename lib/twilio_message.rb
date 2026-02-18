@@ -1,8 +1,10 @@
 require 'twilio-ruby'
 
+CONTENT_SID = 'HX22d7d41e890cdc2554a39336dbc2dfa3'
+
 class TwilioMessage
   def initialize(attributes = {})
-    @content_sid = attributes[:content_sid]
+    twilio_initialise
     @content_variables = attributes[:content_variables] || {}
   end
 
@@ -10,7 +12,7 @@ class TwilioMessage
     twilio_initialise
     client = Twilio::REST::Client.new(@account_sid, @auth_token)
     client.api.v2010.messages.create(
-      content_sid: @content_sid,
+      content_sid: CONTENT_SID,
       to: "whatsapp:#{@to_number}",
       from: "whatsapp:#{@from_number}",
       content_variables: @content_variables.to_json

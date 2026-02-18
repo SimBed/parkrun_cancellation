@@ -1,0 +1,26 @@
+#!/home/simbed/.rbenv/shims/ruby
+# frozen_string_literal: true
+
+# get the shebang line from $which ruby
+# make this file executable with  $chmod +x file_name.rb
+require 'dotenv'
+Dotenv.load(File.expand_path('../twilio.env', __dir__), File.expand_path('../google.env', __dir__), File.expand_path('../notifiers.env', __dir__))
+URL = 'https://www.parkrun.org.uk/cassiobury/'
+# REGEXS = /cancel/i.freeze
+REGEXS = /cassiobury/i.freeze
+require_relative '../lib/cancellation_monitor'
+require_relative '../lib/state_recorder'
+# puts ENV['EMAIL_ENABLED']
+# puts ENV['WHATSAPP_ENABLED']
+
+if StateRecorder.new.already_sent?
+  puts 'Warning already sent for this week. No action taken.'
+else
+  channels = []
+
+  channels << EmailNotifier.new if ENV['EMAIL_ENABLED'] == 'true'
+  channels << WhatsAppNotifier.new if ENV['WHATSAPP_ENABLED'] == 'true'
+
+  notifier = Notifier.new(channels: channels)
+  CancellationMonitor.new(url: URL, regexs: REGEXS, notifier: notifier).run
+end

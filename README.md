@@ -1,7 +1,10 @@
-Receive notification if your energy (gas or electricity usage) unexpectedly changes.  
-Takes data from the Octpus API.  
+Receive notification if Park Run is cancelled.
+Scrapes the public website.  
 Checks the received data.  
-If usage is unexpectedly high, refers to Twilio API to send a Whatsapp warning message.  
-Set up cron job locally for daily automation.  
+If a cancellation is identified, issues notifications.  
+Set up cron job locally for automation.
 
-<img src="octopus.png" alt="demo image" width="300"><br>
+set notification options in notifiers.env
+from project root $ ./bin/cancellation_monitor
+
+<img src="parkrun.svg" alt="demo image" width="300"><br>

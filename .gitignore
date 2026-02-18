@@ -1,1 +1,10 @@
 *.log
+*.env
+# Ignore contents of state directory but keep directory
+/state/*
+!/state/.keep
+
+bin/log.txt
+bin/.byebug_history
+.byebug_history
+bin/cancellation_monitor.sh
