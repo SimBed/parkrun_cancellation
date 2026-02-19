@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AlertState
   PROJECT_ROOT = File.expand_path('..', __dir__) # /home/..../parkrun
   STATE_DIR = File.join(PROJECT_ROOT, 'state') # /home/...../parkrun/state
@@ -10,4 +12,3 @@ module AlertState
     "#{today.year}-W#{today.cweek}" # "2026-W7"
   end
 end
-
