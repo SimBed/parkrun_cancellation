@@ -8,17 +8,15 @@ require 'openssl'
 # the complicated looking user-agent value is actually just the default user-agent string from a Chrome browser on Windows 10
 # (see the the request headers in inspector)
 HEADERS = {
-  'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'\
-  'Chrome/121.0 Safari/537.36',
+  'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)' \
+                  'Chrome/121.0 Safari/537.36',
   'Accept' => 'text/html',
   'Accept-Language' => 'en-US,en;q=0.9',
   'Connection' => 'keep-alive',
   'Upgrade-Insecure-Requests' => '1'
 }.freeze
 
-
 class WebsiteRequester
-
   def initialize(url)
     @uri = URI.parse(url)
   end
@@ -29,13 +27,8 @@ class WebsiteRequester
       http.request(req)
     end
     Nokogiri::HTML(response.body)
-  rescue => e
-  warn "Request failed: #{e}"
-  exit 1
+  rescue StandardError => e
+    warn "Request failed: #{e}"
+    exit 1
   end
 end
-
-# URL = 'https://www.example.com/'
-# WebsiteRequester.new(URL).request
-
-

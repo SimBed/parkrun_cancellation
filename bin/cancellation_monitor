@@ -4,14 +4,13 @@
 # get the shebang line from $which ruby
 # make this file executable with  $chmod +x file_name.rb
 require 'dotenv'
-Dotenv.load(File.expand_path('../twilio.env', __dir__), File.expand_path('../google.env', __dir__), File.expand_path('../notifiers.env', __dir__))
-URL = 'https://www.parkrun.org.uk/cassiobury/'
-# REGEXS = /cancel/i.freeze
-REGEXS = /cassiobury/i.freeze
+PROJECT_ROOT = File.expand_path('..', __dir__)
+Dir.chdir(PROJECT_ROOT)
+Dotenv.load('.env', '.env.secrets')
 require_relative '../lib/cancellation_monitor'
 require_relative '../lib/state_recorder'
-# puts ENV['EMAIL_ENABLED']
-# puts ENV['WHATSAPP_ENABLED']
+PARK_VENUE = ENV['PARK_NAME'].downcase
+URL = "https://www.parkrun.org.uk/#{PARK_VENUE}/"
 
 if StateRecorder.new.already_sent?
   puts 'Warning already sent for this week. No action taken.'
@@ -22,5 +21,5 @@ else
   channels << WhatsAppNotifier.new if ENV['WHATSAPP_ENABLED'] == 'true'
 
   notifier = Notifier.new(channels: channels)
-  CancellationMonitor.new(url: URL, regexs: REGEXS, notifier: notifier).run
+  CancellationMonitor.new(url: URL, notifier: notifier).run
 end
